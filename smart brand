@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Branding Toolkit</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .header-title h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #9333ea, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-subtitle {
+            color: #6b7280;
+            font-size: 1.125rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            padding: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            border: none;
+            background: none;
+            color: #6b7280;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #f3f4f6;
+        }
+
+        .tab.active {
+            background: linear-gradient(to right, #9333ea, #ec4899);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-section {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #9333ea;
+            box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+        }
+
+        .generate-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(to right, #9333ea, #ec4899);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .generate-btn:hover:not(:disabled) {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .input-hint {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.5rem;
+        }
+
+        .results {
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .palette-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .palette-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .palette-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .palette-info h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .palette-info p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .copy-btn {
+            padding: 0.5rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .colors-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .color-box {
+            flex: 1;
+        }
+
+        .color-swatch {
+            height: 6rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .color-swatch:hover {
+            transform: scale(1.05);
+        }
+
+        .color-code {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            font-family: monospace;
+            color: #6b7280;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .action-btn-primary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .action-btn-primary:hover {
+            background: #e5e7eb;
+        }
+
+        .action-btn-secondary {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .action-btn-secondary:hover {
+            background: #ddd6fe;
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .logo-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .logo-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-preview {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, #a78bfa, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-info h3 {
+            font-size: 1.125rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .logo-info p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .logo-description {
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+
+        .logo-colors {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .logo-color {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .name-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .name-card:hover {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .name-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .name-info {
+            flex: 1;
+        }
+
+        .name-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .name-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .score-badge {
+            padding: 0.25rem 0.75rem;
+            background: #d1fae5;
+            color: #065f46;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .name-tagline {
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .name-domain {
+            font-size: 0.875rem;
+            color: #9333ea;
+            font-family: monospace;
+        }
+
+        .name-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .domain-btn {
+            padding: 0.5rem 1rem;
+            background: #ede9fe;
+            color: #7c3aed;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .domain-btn:hover {
+            background: #ddd6fe;
+        }
+
+        .empty-state {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 3rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: #9ca3af;
+        }
+
+        .info-footer {
+            margin-top: 2rem;
+            background: linear-gradient(to right, #9333ea, #ec4899);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .info-title {
+            font-weight: bold;
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .info-item h4 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item p {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .icon {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <span style="font-size: 2.5rem;">✨</span>
+                <h1>AI Branding Toolkit</h1>
+            </div>
+            <p class="header-subtitle">Generate professional brand assets in real-time with AI</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('colors')" id="tab-colors">
+                <span>🎨</span>
+                Color Palettes
+            </button>
+            <button class="tab" onclick="switchTab('logos')" id="tab-logos">
+                <span>🖼️</span>
+                Logo Concepts
+            </button>
+        </div>
+
+        <!-- Input Section -->
+        <div class="input-section">
+            <label class="input-label">Describe your brand or project</label>
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="promptInput"
+                    class="input-field" 
+                    placeholder="e.g., Modern tech startup for sustainable energy solutions..."
+                    onkeypress="if(event.key === 'Enter') generate()"
+                >
+                <button class="generate-btn" id="generateBtn" onclick="generate()">
+                    <span>🪄</span>
+                    Generate
+                </button>
+            </div>
+            <p class="input-hint">💡 Try: "Minimalist cafe", "Bold fitness app", "Eco-friendly clothing brand"</p>
+        </div>
+
+        <!-- Results Sections -->
+        <div id="results-colors" class="results active">
+            <div id="colorPalettes"></div>
+            <div id="empty-colors" class="empty-state">
+                <div class="empty-icon">✨</div>
+                <h3 class="empty-title">Ready to Generate Amazing Brand Assets</h3>
+                <p class="empty-text">Enter a description above and click Generate to see AI magic in action</p>
+            </div>
+        </div>
+
+        <div id="results-logos" class="results">
+            <div id="logoIdeas" class="logo-grid"></div>
+            <div id="empty-logos" class="empty-state">
+                <div class="empty-icon">✨</div>
+                <h3 class="empty-title">Ready to Generate Amazing Brand Assets</h3>
+                <p class="empty-text">Enter a description above and click Generate to see AI magic in action</p>
+            </div>
+        </div>
+
+        <!-- Info Footer -->
+        <div class="info-footer">
+            <h3 class="info-title">✨ Real-Time AI Tools Demonstrated:</h3>
+            <div class="info-grid">
+                <div class="info-item">
+                    <h4>Color Palettes</h4>
+                    <p>Like Coolors, Khroma - instant palette generation with mood matching</p>
+                </div>
+                <div class="info-item">
+                    <h4>Logo Concepts</h4>
+                    <p>Like Midjourney, Firefly - AI-generated design concepts with visual generation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTab = 'colors';
+        let isGenerating = false;
+
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            
+            document.querySelectorAll('.results').forEach(r => r.classList.remove('active'));
+            document.getElementById(`results-${tab}`).classList.add('active');
+        }
+
+        function generate() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            if (!prompt || isGenerating) return;
+
+            isGenerating = true;
+            const btn = document.getElementById('generateBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner">🔄</span> Generating...';
+
+            setTimeout(() => {
+                switch(currentTab) {
+                    case 'colors':
+                        generateColorPalettes();
+                        break;
+                    case 'logos':
+                        generateLogoIdeas();
+                        break;
+                }
+                
+                isGenerating = false;
+                btn.disabled = false;
+                btn.innerHTML = '<span>🪄</span> Generate';
+            }, 1500);
+        }
+
+        function generateColorPalettes() {
+            const palettes = [
+                {
+                    name: 'Ocean Breeze',
+                    colors: ['#006994', '#00A8CC', '#50E3C2', '#B8F2E6', '#FFA07A'],
+                    mood: 'Fresh, Calming'
+                },
+                {
+                    name: 'Sunset Glow',
+                    colors: ['#FF6B35', '#F7931E', '#FDC830', '#F37335', '#C73E1D'],
+                    mood: 'Warm, Energetic'
+                },
+                {
+                    name: 'Forest Dreams',
+                    colors: ['#0B3D0B', '#1B5E20', '#4CAF50', '#81C784', '#C8E6C9'],
+                    mood: 'Natural, Peaceful'
+                },
+                {
+                    name: 'Royal Purple',
+                    colors: ['#1A0033', '#4A148C', '#7B1FA2', '#9C27B0', '#E1BEE7'],
+                    mood: 'Luxurious, Bold'
+                },
+                {
+                    name: 'Candy Pop',
+                    colors: ['#FF007F', '#FF69B4', '#FFB6C1', '#FFC0CB', '#FFE4E1'],
+                    mood: 'Fun, Sweet'
+                },
+                {
+                    name: 'Midnight Blues',
+                    colors: ['#000814', '#001D3D', '#003566', '#FFC300', '#FFD60A'],
+                    mood: 'Deep, Sophisticated'
+                },
+                {
+                    name: 'Desert Sand',
+                    colors: ['#8B4513', '#D2691E', '#F4A460', '#DEB887', '#FFE4B5'],
+                    mood: 'Warm, Earthy'
+                },
+                {
+                    name: 'Neon Nights',
+                    colors: ['#0D0221', '#0F084B', '#26408B', '#A6CFD5', '#C2E7DA'],
+                    mood: 'Modern, Electric'
+                }
+            ];
+
+            const container = document.getElementById('colorPalettes');
+            document.getElementById('empty-colors').style.display = 'none';
+            
+            container.innerHTML = palettes.map((palette, idx) => `
+                <div class="palette-card">
+                    <div class="palette-header">
+                        <div class="palette-info">
+                            <h3>${palette.name}</h3>
+                            <p>${palette.mood}</p>
+                        </div>
+                        <button class="copy-btn" onclick="copyColors(${idx})">
+                            <span>📋</span>
+                        </button>
+                    </div>
+                    <div class="colors-wrapper">
+                        ${palette.colors.map(color => `
+                            <div class="color-box">
+                                <div class="color-swatch" style="background-color: ${color}"></div>
+                                <p class="color-code">${color}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn action-btn-primary">Export Palette</button>
+                        <button class="action-btn action-btn-secondary">Adjust Shades</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function generateLogoIdeas() {
+            const concepts = [
+                {
+                    style: 'Geometric Abstract',
+                    description: 'Interlocking hexagons forming a modern symbol',
+                    elements: 'Shape-based, minimal',
+                    colors: ['#3B82F6', '#8B5CF6'],
+                    visual: generateAbstractLogo(['#3B82F6', '#8B5CF6'])
+                },
+                {
+                    style: 'Lettermark',
+                    description: 'Stylized initials with negative space',
+                    elements: 'Typography-focused',
+                    colors: ['#0F172A', '#F59E0B'],
+                    visual: generateLettermarkLogo(['#0F172A', '#F59E0B'])
+                },
+                {
+                    style: 'Icon + Text',
+                    description: 'Abstract icon paired with clean sans-serif',
+                    elements: 'Balanced, versatile',
+                    colors: ['#2D5016', '#6B8E23'],
+                    visual: generateIconLogo(['#2D5016', '#6B8E23'])
+                },
+                {
+                    style: 'Mascot Character',
+                    description: 'Friendly character representing brand values',
+                    elements: 'Approachable, memorable',
+                    colors: ['#FF6B6B', '#4ECDC4'],
+                    visual: generateMascotLogo(['#FF6B6B', '#4ECDC4'])
+                }
+            ];
+
+            const container = document.getElementById('logoIdeas');
+            document.getElementById('empty-logos').style.display = 'none';
+            
+            container.innerHTML = concepts.map((logo, idx) => `
+                <div class="logo-card">
+                    <div class="logo-preview">
+                        <div class="logo-icon" id="logo-${idx}" style="background: ${logo.colors[0]};">
+                            ${logo.visual}
+                        </div>
+                        <div class="logo-info">
+                            <h3>${logo.style}</h3>
+                            <p>${logo.elements}</p>
+                        </div>
+                    </div>
+                    <p class="logo-description">${logo.description}</p>
+                    <div class="logo-colors">
+                        ${logo.colors.map(color => `
+                            <div class="logo-color" style="background-color: ${color}"></div>
+                        `).join('')}
+                    </div>
+                    <div class="action-buttons">
+                        <button class="action-btn action-btn-primary" onclick="downloadLogo(${idx}, '${logo.style}')">
+                            <span>📥</span> Download Logo
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function downloadLogo(idx, styleName) {
+            const logoElement = document.getElementById(`logo-${idx}`);
+            const svg = logoElement.querySelector('svg');
+            
+            if (!svg) {
+                alert('❌ Logo not found');
+                return;
+            }
+
+            // Get SVG content
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            
+            // Create download link
+            const downloadLink = document.createElement('a');
+            downloadLink.href = svgUrl;
+            downloadLink.download = `${styleName.replace(/\s+/g, '-').toLowerCase()}-logo.svg`;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(svgUrl);
+            
+            alert('✅ Logo downloaded successfully!');
+        }
+
+        function generateAbstractLogo(colors) {
+            return `
+                <svg width="80" height="80" viewBox="0 0 80 80" style="display: block;">
+                    <polygon points="40,10 60,30 60,50 40,70 20,50 20,30" fill="${colors[1]}" opacity="0.8"/>
+                    <polygon points="40,20 55,35 55,45 40,60 25,45 25,35" fill="white"/>
+                    <circle cx="40" cy="40" r="8" fill="${colors[0]}"/>
+                </svg>
+            `;
+        }
+
+        function generateLettermarkLogo(colors) {
+            return `
+                <svg width="80" height="80" viewBox="0 0 80 80" style="display: block;">
+                    <text x="40" y="55" font-family="Arial Black" font-size="48" font-weight="bold" fill="white" text-anchor="middle">${getInitials()}</text>
+                    <rect x="15" y="15" width="50" height="50" fill="none" stroke="${colors[1]}" stroke-width="3" rx="8"/>
+                </svg>
+            `;
+        }
+
+        function generateIconLogo(colors) {
+            return `
+                <svg width="80" height="80" viewBox="0 0 80 80" style="display: block;">
+                    <circle cx="40" cy="35" r="18" fill="white"/>
+                    <path d="M 25 55 Q 40 70 55 55" stroke="white" stroke-width="6" fill="none" stroke-linecap="round"/>
+                    <circle cx="33" cy="32" r="3" fill="${colors[0]}"/>
+                    <circle cx="47" cy="32" r="3" fill="${colors[0]}"/>
+                </svg>
+            `;
+        }
+
+        function generateMascotLogo(colors) {
+            return `
+                <svg width="80" height="80" viewBox="0 0 80 80" style="display: block;">
+                    <ellipse cx="40" cy="45" rx="25" ry="28" fill="white"/>
+                    <circle cx="32" cy="40" r="4" fill="${colors[1]}"/>
+                    <circle cx="48" cy="40" r="4" fill="${colors[1]}"/>
+                    <path d="M 30 52 Q 40 58 50 52" stroke="${colors[1]}" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <ellipse cx="25" cy="30" rx="8" ry="12" fill="white"/>
+                    <ellipse cx="55" cy="30" rx="8" ry="12" fill="white"/>
+                </svg>
+            `;
+        }
+
+        function getInitials() {
+            const prompt = document.getElementById('promptInput').value.trim();
+            const words = prompt.split(' ').filter(w => w.length > 2);
+            if (words.length >= 2) {
+                return (words[0][0] + words[1][0]).toUpperCase();
+            } else if (words.length === 1) {
+                return words[0].substring(0, 2).toUpperCase();
+            }
+            return 'AB';
+        }
+
+        function copyName(idx) {
+            const names = ['Nexify', 'Lumora', 'Vortyx', 'Prismly', 'Zephyr Labs'];
+            navigator.clipboard.writeText(names[idx]);
+            alert('✅ Brand name copied to clipboard!');
+        }
+    </script>
+</body>
+</html>
